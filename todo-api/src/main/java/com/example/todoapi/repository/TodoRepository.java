@@ -1,4 +1,4 @@
-package src.main.java.com.example.todoapi.repository;
+package com.example.todoapi.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import src.main.java.com.example.todoapi.domain.Todo;

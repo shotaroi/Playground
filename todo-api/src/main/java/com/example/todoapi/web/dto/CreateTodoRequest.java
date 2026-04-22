@@ -1,4 +1,4 @@
-package src.main.java.com.example.todoapi.web.dto;
+package com.example.todoapi.web.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
