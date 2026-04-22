@@ -1,3 +1,5 @@
+package src.main.java.com.example.todoapi.domain;
+
 import java.time.Instant;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -7,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
-
 
 @Entity
 @Table(name = "todos")
@@ -22,7 +23,7 @@ public class Todo {
     @Column(name = "completed", nullable = false)
     private boolean completed;
 
-    @Column(name = "created_at" nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
     @Column(name = "updated_at", nullable = false, updatable = false)
@@ -49,6 +50,4 @@ public class Todo {
     public Instant getUpdatedAt() { return updatedAt; }
     public void setTitle(String title) { this.title = title; } 
     public void setCompleted(boolean completed) { this.completed = completed; }
-    public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
-    public void setUpdatedAt(Instant updatedAt) { this.updatedAt = updatedAt; }
 }
