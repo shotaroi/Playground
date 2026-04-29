@@ -41,7 +41,7 @@ public class Todo {
         updatedAt = Instant.now();
     }
 
-    protected Todo() {}
+    public Todo() {}
 
     public Long getId() { return id; }
     public String getTitle() { return title; }
