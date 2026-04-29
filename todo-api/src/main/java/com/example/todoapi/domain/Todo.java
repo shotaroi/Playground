@@ -1,4 +1,4 @@
-package src.main.java.com.example.todoapi.domain;
+package com.example.todoapi.domain;
 
 import java.time.Instant;
 import jakarta.persistence.Entity;
