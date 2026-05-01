@@ -9,10 +9,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import com.example.todoapi.service.TodoService;
 import com.example.todoapi.web.dto.CreateTodoRequest;
 import com.example.todoapi.web.dto.TodoResponse;
+import com.example.todoapi.web.dto.UpdateTodoRequest;
 
 import jakarta.validation.Valid;
 
@@ -54,7 +58,7 @@ public class TodoController {
     }
 
     @DeleteMapping("/{id}")
-    public Responseentity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         if (!todoService.deleteById(id)) {
             return ResponseEntity.notFound().build();
         }

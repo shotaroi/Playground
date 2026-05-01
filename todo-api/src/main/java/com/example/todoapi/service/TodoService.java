@@ -5,11 +5,14 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.todoapi.domain.Todo;
 import com.example.todoapi.repository.TodoRepository;
 import com.example.todoapi.web.dto.CreateTodoRequest;
 import com.example.todoapi.web.dto.TodoResponse;
+import com.example.todoapi.web.dto.UpdateTodoRequest;
 
 @Service
 public class TodoService {
@@ -40,7 +43,7 @@ public class TodoService {
     }
 
     @Transactional
-    poublic Optional<TodoResponse> update(Long id, UpdateTodoRequest request) {
+    public Optional<TodoResponse> update(Long id, UpdateTodoRequest request) {
         Optional<Todo> existing = todoRepository.findById(id);
         if (existing.isEmpty()) return Optional.empty();
 
