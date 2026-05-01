@@ -31,10 +31,34 @@ public class TodoController {
         return todoService.findAll();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<TodoResponse> getById(@PathVariable Long id) {
+        return todoService.findById(id)
+        .map(ResponseEntity::ok)
+        .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public TodoResponse create(@Valid @RequestBody CreateTodoRequest request) {
         return todoService.create(request);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<TodoResponse> patch(
+        @PathVariable Long id,
+        @Valid @RequestBody UpdateTodoRequest request) {
+            return todoService.update(id, request)
+            .map(ResponseEntity::ok)
+            .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public Responseentity<Void> delete(@PathVariable Long id) {
+        if (!todoService.deleteById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.noContent().build();
     }
 
 }
