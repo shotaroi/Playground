@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import { li, p, ul } from 'framer-motion/client'
 
 type Todo = {
   id: number
