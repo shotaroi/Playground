@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import { li, p, ul } from 'framer-motion/client'
 
 type Todo = {
   id: number
@@ -115,7 +116,76 @@ function App() {
 
   return (
     <>
-     
+     <main>
+      <h1>Todos</h1>
+
+      {error ? (
+        <p role="alert" className='error'>{error}</p>
+      ) : null}
+
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <>
+          <form onSubmit={handleCreate}>
+            <label htmlFor="new-todo-title">New todo</label>
+            <input 
+              id="new-todo-title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              maxLength={500}
+              disabled={creating}
+            />
+            <button type='submit' disabled={creating}>
+              {creating ? 'Adding...' : 'Add'}
+            </button>
+          </form>
+
+          {todos.length === 0 ? (
+            <p>No todos yet.</p>
+          ) : (
+            <ul>
+              {todos.map((todo) => {
+                const busy = 
+                updatingId === todo.id || deletingId === todo.id
+                return (
+                  <li key={todo.id}>
+                    <label>
+                      <input 
+                        type="checkbox" 
+                        checked={todo.completed}
+                        disabled={busy || updatingId !== null}
+                        onChange={() => handleToggleComplete(todo)}
+                      />
+                      <span
+                        style={{
+                          textDecoration: todo.completed
+                          ? 'line-through'
+                          : undefined,
+                        }}
+                      >
+                        {todo.title}
+                      </span>
+                    </label>
+                    <button
+                      type='button'
+                      disabled={
+                        busy ||
+                        deletingId !== null ||
+                        updatingId !== null
+                      }
+                      onClick={() => handleDelete(todo.id)}
+                    >
+                      {deletingId === todo.id ? 'Deleting...' : 'Delete'}
+                    </button>
+                  </li>
+                )
+              })}
+            </ul>
+          )}
+        </>
+      )}
+     </main>
     </>
   )
 }
