@@ -94,6 +94,25 @@ function App() {
     }
   }
 
+  async function handleDelete(id: number) {
+    if (deletingId !== null || updatingId !== null) return
+
+    setDeletingId(id)
+    try {
+      setError(null)
+      const res = await fetch(`/api/todos/${id}`, {method: 'DELETE'})
+      if (!res.ok) {
+        setError(`${res.status} ${res.statusText}`)
+        return
+      }
+      setTodos((prev) => prev.filter((t) => t.id !== id))
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete')
+    } finally {
+      setDeletingId(null)
+    }
+  }
+
   return (
     <>
      
