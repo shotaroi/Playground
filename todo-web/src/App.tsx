@@ -117,7 +117,7 @@ function App() {
 
   return (
     <>
-     <main>
+     <main style={{maxWidth: '28rem', margin: '0 auto', width: '100%', textAlign: 'left'}}>
       <h1>Todos</h1>
 
       {error ? (
@@ -150,8 +150,15 @@ function App() {
                 const busy = 
                 updatingId === todo.id || deletingId === todo.id
                 return (
-                  <li key={todo.id}>
-                    <label>
+                  <li 
+                    key={todo.id}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.75rem',
+                    }}
+                  >
+                    <label style={{flex: 1, minWidth: 0, display: 'flex', alignItems: 'center', gap: '0.5rem'}}>
                       <input 
                         type="checkbox" 
                         checked={todo.completed}
