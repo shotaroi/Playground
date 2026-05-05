@@ -284,7 +284,8 @@ function App() {
                       disabled={
                         busy ||
                         deletingId !== null ||
-                        updatingId !== null
+                        updatingId !== null ||
+                        editingId !== null
                       }
                       onClick={() => handleDelete(todo.id)}
                     >
