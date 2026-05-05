@@ -48,6 +48,7 @@ function App() {
     e.preventDefault()
     const trimmed = title.trim()
     if (!trimmed) return
+    setCreating(true)
     try {
       setError(null)
       const res = await fetch('/api/todos', {
@@ -61,6 +62,7 @@ function App() {
       }
       const created: Todo = await res.json()
       setTodos((prev) => [...prev, created])
+      setTitle('')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create')
     } finally {
