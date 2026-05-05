@@ -11,6 +11,7 @@ type Todo = {
 
 function App() {
   const [todos, setTodos] = useState<Todo[]>([])
+  const [title, setTitle] = useState('')
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -36,6 +37,49 @@ function App() {
       cancelled = true
     }
   }, [])
+
+  async function handleCreate(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    const trimmed = title.trim()
+    if (!trimmed) return
+    try {
+      setError(null)
+      const res = await fetch('/api/todos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: trimmed }),
+      })
+      if (!res.ok) {
+        setError(`${res.status} ${res.statusText}`)
+        return
+      }
+      const created: Todo = await res.json()
+      setTodos((prev) => [...prev, created])
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to create')
+    }
+  }
+
+  async function handleToggleComplete(todo: Todo) {
+    const next = !todo.completed
+    try {
+      setError(null)
+      const res = await fetch(`/api/todos/${todo.id}`, {
+        method: 'PATCH',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({completed: next}),
+      })
+      if (!res.ok) {
+        setError(`${res.status} ${res.statusText}`)
+        return
+      }
+      const updated: Todo = await res.json()
+      setTodos((prev) => 
+        prev.map((t) => t.id === updated.id ? updated : t))
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update')
+    }
+  }
 
   return (
     <>
