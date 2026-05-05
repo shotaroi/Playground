@@ -63,11 +63,16 @@ function App() {
       setTodos((prev) => [...prev, created])
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create')
+    } finally {
+      setCreating(false)
     }
   }
 
   async function handleToggleComplete(todo: Todo) {
+    if (updatingId !== null || deletingId !== null) return
+
     const next = !todo.completed
+    setUpdatingId(todo.id)
     try {
       setError(null)
       const res = await fetch(`/api/todos/${todo.id}`, {
@@ -84,6 +89,8 @@ function App() {
         prev.map((t) => t.id === updated.id ? updated : t))
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to update')
+    } finally {
+      setUpdatingId(null)
     }
   }
 
