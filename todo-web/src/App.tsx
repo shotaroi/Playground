@@ -117,7 +117,7 @@ function App() {
 
   return (
     <>
-     <main style={{maxWidth: '28rem', margin: '0 auto', width: '100%', textAlign: 'left'}}>
+     <main style={{maxWidth: '28rem', margin: '0 auto', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
       <h1>Todos</h1>
 
       {error ? (
@@ -128,7 +128,15 @@ function App() {
         <p>Loading...</p>
       ) : (
         <>
-          <form onSubmit={handleCreate}>
+          <form onSubmit={handleCreate}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '0.75rem',
+              width: '100%',
+            }}
+          >
             <label htmlFor="new-todo-title">New todo</label>
             <input 
               id="new-todo-title"
@@ -136,6 +144,7 @@ function App() {
               onChange={(e) => setTitle(e.target.value)}
               maxLength={500}
               disabled={creating}
+              style={{ width: '100%', maxWidth: '20rem'}}
             />
             <button type='submit' disabled={creating}>
               {creating ? 'Adding...' : 'Add'}
