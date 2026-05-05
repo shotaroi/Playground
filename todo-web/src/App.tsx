@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import { button, input } from 'framer-motion/client'
 
 type Todo = {
   id: number
@@ -73,7 +74,7 @@ function App() {
   }
 
   async function handleToggleComplete(todo: Todo) {
-    if (updatingId !== null || deletingId !== null) return
+    if (updatingId !== null || deletingId !== null || editingId !== null) return
 
     const next = !todo.completed
     setUpdatingId(todo.id)
@@ -99,7 +100,7 @@ function App() {
   }
 
   async function handleDelete(id: number) {
-    if (deletingId !== null || updatingId !== null) return
+    if (deletingId !== null || updatingId !== null || editingId !== null) return
 
     setDeletingId(id)
     try {
@@ -187,7 +188,15 @@ function App() {
               width: '100%',
             }}
           >
-            <label htmlFor="new-todo-title">New todo</label>
+            <label 
+              style={{
+                flex: 1,
+                minWidth: 0,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+              }}
+            >New todo</label>
             <input 
               id="new-todo-title"
               value={title}
@@ -221,19 +230,55 @@ function App() {
                       <input 
                         type="checkbox" 
                         checked={todo.completed}
-                        disabled={busy || updatingId !== null}
+                        disabled={busy || updatingId !== null || editingId !== null || editingId === todo.id}
                         onChange={() => handleToggleComplete(todo)}
                       />
-                      <span
-                        style={{
-                          textDecoration: todo.completed
-                          ? 'line-through'
-                          : undefined,
-                        }}
-                      >
-                        {todo.title}
-                      </span>
+                      {editingId === todo.id ? (
+                        <input 
+                          value={editTitle}  
+                          onChange={(e) => setEditTitle(e.target.value)}
+                          maxLength={500}
+                          disabled={busy}
+                          style={{ flex: 1, minWidth: 0}}
+                          aria-label="Edit title"
+                        />
+                      ) : (
+                        <span
+                          style={{
+                            flex: 1, 
+                            textDecoration: todo.completed ? 'line-through' : undefined,
+                          }}
+                        >
+                          {todo.title}
+                        </span>
+                      )}                      
                     </label>
+
+                    {editingId === todo.id ? (
+                      <>
+                        <button type='button' disabled={busy} onClick={() => handleSaveTitle(todo)}>
+                          Save
+                        </button>
+                        <button type='button' disabled={busy} onClick={cancelEdit}>
+                          Cancel
+                        </button>
+                      </>
+                    ) : (
+                      <button 
+                        type='button'
+                        disabled={
+                          busy ||
+                          deletingId !== null ||
+                          updatingId !== null || 
+                          creating || 
+                          (editingId !== null && editingId !== todo.id)
+                        }
+                        onClick={() => startEdit(todo)}
+                      >
+                        Edit
+                      </button>
+                    )}
+                    
                     <button
                       type='button'
                       disabled={
