@@ -17,6 +17,8 @@ function App() {
   const [creating, setCreating] = useState(false)
   const [updatingId, setUpdatingId] = useState<number | null>(null)
   const [deletingId, setDeletingId] = useState<number | null>(null)
+  const [editingId, setEditingId] = useState<number | null>(null)
+  const [editTitle, setEditTitle] = useState('')
 
   useEffect(() => {
     let cancelled = false
@@ -112,6 +114,54 @@ function App() {
       setError(err instanceof Error ? err.message : 'Failed to delete')
     } finally {
       setDeletingId(null)
+    }
+  }
+
+  function startEdit(todo: Todo) {
+    if (
+      updatingId !== null ||
+      deletingId !== null || 
+      creating ||
+      (editingId !== null && editingId !== todo.id)
+    ) return
+    setEditingId(todo.id)
+    setEditTitle(todo.title)
+  }
+
+  function cancelEdit() {
+    setEditingId(null)
+    setEditTitle('')
+  }
+
+  async function handleSaveTitle(todo: Todo) {
+    if (updatingId !== null || deletingId !== null) return
+
+    const trimmed = editTitle.trim()
+    if (!trimmed) {
+      setError('Title cannot be empty')
+      return
+    }
+
+    setUpdatingId(todo.id)
+    try {
+      setError(null)
+      const res = await fetch(`/api/todos/${todo.id}`, {
+        method: 'PATCH',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({title: trimmed}),
+      })
+      if (!res.ok) {
+        setError(`${res.status} ${res.statusText}`)
+        return
+      }
+      const updated: Todo = await res.json()
+      setTodos((prev) => 
+      prev.map((t) => (t.id === updated.id ? updated : t)),)
+      cancelEdit()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update')
+    } finally {
+      setUpdatingId(null)
     }
   }
 
