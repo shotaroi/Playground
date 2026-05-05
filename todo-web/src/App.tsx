@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import { button, input } from 'framer-motion/client'
 
 type Todo = {
   id: number
@@ -189,6 +188,7 @@ function App() {
             }}
           >
             <label 
+              htmlFor="new-todo-title"
               style={{
                 flex: 1,
                 minWidth: 0,
@@ -230,7 +230,7 @@ function App() {
                       <input 
                         type="checkbox" 
                         checked={todo.completed}
-                        disabled={busy || updatingId !== null || editingId !== null || editingId === todo.id}
+                        disabled={busy || updatingId !== null || editingId !== null}
                         onChange={() => handleToggleComplete(todo)}
                       />
                       {editingId === todo.id ? (
